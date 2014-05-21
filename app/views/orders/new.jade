@@ -1,0 +1,30 @@
+extends ../shared/template
+
+block content
+  h1= title
+
+  #user
+    h1= user.email
+
+  button#add Add Row
+
+  form#order(action='/orders', method='post')
+    button Create Order
+    .menu-item
+      input.qty(type='number', name='qty')
+      select.menu
+        option Select from Menu
+        each item in menuItems
+          option #{item}
+      select.dish(name='dishId')
+        option Select a Dish
+      input.total(type='hidden', name='total')
+      input.cals(type='hidden', name='calories')
+      button.button.button-small.button.button-caution#delete X
+
+
+  #total
+  #calories
+
+block scripts
+  script(src='/js/es6/compiled/orders.js')
