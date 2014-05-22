@@ -1,7 +1,7 @@
 /* jshint unused:false */
 'use strict';
 
-var orders = global.nss.db.collection('orders');
+
 var dishes = global.nss.db.collection('dishes');
 var Mongo = require('mongodb');
 // var bcrypt = require('bcrypt');
@@ -10,7 +10,7 @@ var Mongo = require('mongodb');
 class Order{
   constructor(obj, userId){
 
-    this.meal = obj;
+    this.meal = obj.selections;
     this.date = new Date();
     this.userId = userId;
     this.calories = obj.calories;

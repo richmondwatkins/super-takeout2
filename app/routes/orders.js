@@ -5,6 +5,7 @@ var traceur = require('traceur');
 var Dish = traceur.require(__dirname + '/../models/dish.js');
 var User = traceur.require(__dirname + '/../models/user.js');
 var Order = traceur.require(__dirname + '/../models/order.js');
+var orders = global.nss.db.collection('orders');
 var _ = require('lodash');
 
 exports.new = (req, res)=>{
@@ -22,30 +23,33 @@ exports.addMenu = (req, res)=>{
 };
 
 exports.create = (req, res)=>{
-  // console.log(req.body);
+
   var dishObject = [];
-  var order = {};
-  order.total = req.body.total[0];
-  order.calories = req.body.calories[0];
+  var selections = {};
   for(var i = 0; i < req.body.qty.length; i++){
-    order.qty = req.body.qty[i];
-    order.dishId = req.body.dishId[i];
-    dishObject.push(order);
-
+    selections.qty = req.body.qty[i];
+    selections.dishId = req.body.dishId[i];
+    dishObject.push(selections);
   }
-  console.log(dishObject);
-    // var orders = new Order(dishObject, req.session.userId);
+
+  Order.findByDishId(req.body.dishId, dishes=>{
+    console.log(dishes);
+      var order = {};
+      var names = [];
+    for(var j = 0; j < dishes.length; j++){
+      names.push(dishes[j].name);
+      order.selections = names;
+    }
+      order.total = req.body.total[0];
+      order.calories = req.body.calories[0];
+
+      orders.save(order, ()=>res.redirect('/orders'));
+
+    });
 
 
-    // Order.findByDishId(req.body.dishId, res=>{
-    //     var cals = res[0].calories;
-    //     console.log(cals);
-    //
-    // });
-
-      // console.log(orders);
 };
-  //
+  //tree.save(()=>res.render('trees/tree', {tree:tree}));
   // exports.login = (req, res)=>{
   //   var user = new User(req.body);
   //   user.login(u=>{
